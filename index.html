@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>个人所得税 · 前端界面演示</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<!-- ======================= SVG 图标精灵（stroke 继承自 .ic，不要给 path 写 fill/stroke） ======================= -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 10.6 12 3.3l9 7.3V20a1 1 0 0 1-1 1h-4.6v-6.1H8.6V21H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="ic-bank" viewBox="0 0 24 24"><path d="M3.2 9.6 12 3.8l8.8 5.8"/><path d="M5.8 10.8v7.2M10 10.8v7.2M14 10.8v7.2M18.2 10.8v7.2"/><path d="M3 20.4h18"/></symbol>
+  <symbol id="ic-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.7"/><path d="M4.6 20.6c1.5-3.6 4.2-5.5 7.4-5.5s5.9 1.9 7.4 5.5"/></symbol>
+  <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.8"/><path d="m16.2 16.2 4.3 4.3"/></symbol>
+  <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></symbol>
+  <symbol id="ic-back" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5"/></symbol>
+  <symbol id="ic-bell" viewBox="0 0 24 24"><path d="M18 16.2V10a6 6 0 1 0-12 0v6.2L4.4 19h15.2z"/><path d="M9.8 21.4h4.4"/></symbol>
+  <symbol id="ic-calc" viewBox="0 0 24 24"><rect x="4.2" y="2.8" width="15.6" height="18.4" rx="2.6"/><path d="M7.6 7h8.8"/><path d="M8.4 11.8h.01M12 11.8h.01M15.6 11.8h.01M8.4 15.4h.01M12 15.4h.01M15.6 15.4h.01M8.4 18.7h7.2"/></symbol>
+  <symbol id="ic-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2.6"/><path d="M3 10.2h18"/><path d="M16.4 14.6h2.2"/></symbol>
+  <symbol id="ic-plusdoc" viewBox="0 0 24 24"><path d="M6.5 2.8h7.2L18.9 8v13a1 1 0 0 1-1 1H6.5a1 1 0 0 1-1-1V3.8a1 1 0 0 1 1-1z"/><path d="M13.5 2.8V8h4.4"/><path d="M12.2 12.4v5.8M9.3 15.3h5.8"/></symbol>
+  <symbol id="ic-edit" viewBox="0 0 24 24"><path d="M12 20.5h8.5"/><path d="M16.4 3.6a2 2 0 0 1 2.9 2.8L7.6 18.1 3.5 19.3l1.2-4.1z"/></symbol>
+  <symbol id="ic-chart" viewBox="0 0 24 24"><path d="M3.5 20.5h17"/><path d="M6.8 20.5v-6.2M12 20.5V6.4M17.2 20.5v-9.4"/></symbol>
+  <symbol id="ic-cert" viewBox="0 0 24 24"><circle cx="12" cy="9.2" r="5.6"/><path d="M8.6 14.2 7.2 21.6l4.8-2.7 4.8 2.7-1.4-7.4"/></symbol>
+  <symbol id="ic-file" viewBox="0 0 24 24"><path d="M6.5 2.8h7.2L18.9 8v13a1 1 0 0 1-1 1H6.5a1 1 0 0 1-1-1V3.8a1 1 0 0 1 1-1z"/><path d="M13.5 2.8V8h4.4"/><path d="M9 13.2h6M9 16.8h4"/></symbol>
+  <symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 2.8 19.2 5.6v6.1c0 4.4-2.9 7.5-7.2 9.3-4.3-1.8-7.2-4.9-7.2-9.3V5.6z"/><path d="m9.1 11.9 2 2 3.9-3.9"/></symbol>
+  <symbol id="ic-chat" viewBox="0 0 24 24"><path d="M21 12a8.4 8.4 0 0 1-8.4 8.4c-1.5 0-2.9-.4-4.1-1L3 21l1.6-5a8.4 8.4 0 1 1 16.4-4z"/></symbol>
+  <symbol id="ic-scan" viewBox="0 0 24 24"><path d="M4 8.6V5.4A1.4 1.4 0 0 1 5.4 4h3.2M15.4 4h3.2A1.4 1.4 0 0 1 20 5.4v3.2M20 15.4v3.2a1.4 1.4 0 0 1-1.4 1.4h-3.2M8.6 20H5.4A1.4 1.4 0 0 1 4 18.6v-3.2"/><path d="M3.2 12h17.6"/></symbol>
+  <symbol id="ic-briefcase" viewBox="0 0 24 24"><rect x="3" y="7.4" width="18" height="12.4" rx="2.2"/><path d="M8.6 7.4V5.8a2 2 0 0 1 2-2h2.8a2 2 0 0 1 2 2v1.6"/><path d="M3 12.4h18"/></symbol>
+  <symbol id="ic-users" viewBox="0 0 24 24"><circle cx="9.4" cy="8.4" r="3.4"/><path d="M2.8 20.2c1.3-3.3 3.7-5 6.6-5s5.3 1.7 6.6 5"/><path d="M16.4 5.4a3.4 3.4 0 0 1 0 6.6M18 15.6c1.6.6 2.8 2.1 3.6 4.6"/></symbol>
+  <symbol id="ic-card" viewBox="0 0 24 24"><rect x="2.8" y="5.4" width="18.4" height="13.2" rx="2.4"/><path d="M2.8 10h18.4"/><path d="M6.2 14.6h3.4"/></symbol>
+  <symbol id="ic-id" viewBox="0 0 24 24"><rect x="2.8" y="4.6" width="18.4" height="14.8" rx="2.4"/><circle cx="8.6" cy="11" r="2.2"/><path d="M5.4 16.4c.7-1.5 1.8-2.3 3.2-2.3s2.5.8 3.2 2.3"/><path d="M14.4 10.4h4.2M14.4 13.6h4.2"/></symbol>
+  <symbol id="ic-lock" viewBox="0 0 24 24"><rect x="4.6" y="10.2" width="14.8" height="10.4" rx="2.4"/><path d="M8.2 10.2V7.6a3.8 3.8 0 0 1 7.6 0v2.6"/><path d="M12 14.4v2.4"/></symbol>
+  <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.2V12l3.4 2"/></symbol>
+  <symbol id="ic-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.9.7-.9 1.3v.5"/><path d="M12 16.8h.01"/></symbol>
+  <symbol id="ic-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.1"/><path d="M12 2.6v2.6M12 18.8v2.6M21.4 12h-2.6M5.2 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4.5 4.5 8.5-9.5"/></symbol>
+  <symbol id="ic-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M12 11v5.4"/><path d="M12 7.8h.01"/></symbol>
+  <symbol id="ic-face" viewBox="0 0 24 24"><path d="M4 8.6V5.4A1.4 1.4 0 0 1 5.4 4h3.2M15.4 4h3.2A1.4 1.4 0 0 1 20 5.4v3.2M20 15.4v3.2a1.4 1.4 0 0 1-1.4 1.4h-3.2M8.6 20H5.4A1.4 1.4 0 0 1 4 18.6v-3.2"/><path d="M9 10.6v1.4M15 10.6v1.4"/><path d="M9.2 15.2c1.8 1.4 3.8 1.4 5.6 0"/></symbol>
+  <symbol id="ic-doc" viewBox="0 0 24 24"><rect x="4.4" y="2.8" width="15.2" height="18.4" rx="2.4"/><path d="M8.2 8h7.6M8.2 12h7.6M8.2 16h4.6"/></symbol>
+  <symbol id="ic-lightning" viewBox="0 0 24 24"><path d="M13.4 2.6 4.8 13.4h6.2l-1.2 8 8.6-10.8h-6.2z"/></symbol>
+  <symbol id="ic-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="ic-down" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+  <symbol id="ic-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="ic-horn" viewBox="0 0 24 24"><path d="M3.6 10v4a1 1 0 0 0 1 1h2.2l7.4 4.4a.8.8 0 0 0 1.2-.7V5.3a.8.8 0 0 0-1.2-.7L6.8 9H4.6a1 1 0 0 0-1 1z"/><path d="M18.8 9.4a4.4 4.4 0 0 1 0 5.2M15.4 4.4v15.2"/></symbol>
+  <symbol id="ic-todo" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="16" rx="2.6"/><path d="M8 3v3M16 3v3M3.5 9.5h17"/><path d="m9 14.6 2.2 2.2 4-4.4"/></symbol>
+  <symbol id="ic-searchdoc" viewBox="0 0 24 24"><rect x="4.4" y="2.8" width="15.2" height="18.4" rx="2.4"/><path d="M8.2 8h7.6M8.2 12h3.6"/><circle cx="14.8" cy="16.2" r="2.7"/><path d="m16.9 18.3 2 2"/></symbol>
+  <symbol id="ic-heart" viewBox="0 0 24 24"><path d="M12 20.3 5 13.4a4.7 4.7 0 0 1 6.6-6.6l.4.4.4-.4a4.7 4.7 0 0 1 6.6 6.6z"/></symbol>
+  <symbol id="ic-bulb" viewBox="0 0 24 24"><path d="M9.2 18.2h5.6M10.2 21.2h3.6"/><path d="M12 2.9a6.1 6.1 0 0 1 3.7 10.9c-.8.6-1.2 1.4-1.2 2.3h-5c0-.9-.4-1.7-1.2-2.3A6.1 6.1 0 0 1 12 2.9z"/></symbol>
+  <symbol id="ic-headset" viewBox="0 0 24 24"><path d="M4.2 13.6v-2.2a7.8 7.8 0 0 1 15.6 0v2.2"/><rect x="2.8" y="13" width="4.2" height="6.4" rx="1.8"/><rect x="17" y="13" width="4.2" height="6.4" rx="1.8"/><path d="M19.2 19.4v.6a2.4 2.4 0 0 1-2.4 2.4H13"/></symbol>
+</svg>
+
+<!-- ======================= 舞台 ======================= -->
+<div class="stage">
+  <div class="stage__inner">
+
+    <!-- 应用容器（已去除手机外壳：无边框 / 无侧键 / 无灵动岛 / 无状态栏） -->
+    <div class="phone">
+      <div class="phone__screen" id="screen">
+
+        <!-- 可滚动视口 -->
+        <div class="viewport" id="viewport">
+
+          <!-- ============ 1. 启动 Loading（对齐截图 00） ============ -->
+          <section class="page" data-page="splash" data-immersive="true" data-chrome="none">
+            <div class="splash">
+              <div class="splash__float" aria-hidden="true">
+                <span style="left:11%;top:13%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-doc"/></svg></span>
+                <span style="left:33%;top:20%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-bell"/></svg></span>
+                <span style="left:57%;top:11%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-chart"/></svg></span>
+                <span style="left:80%;top:19%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-wallet"/></svg></span>
+                <span style="left:6%;top:33%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-chat"/></svg></span>
+                <span style="left:27%;top:41%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-calc"/></svg></span>
+                <span style="left:74%;top:38%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-card"/></svg></span>
+                <span style="left:91%;top:30%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-cert"/></svg></span>
+                <span style="left:13%;top:57%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-file"/></svg></span>
+                <span style="left:36%;top:64%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-user"/></svg></span>
+                <span style="left:60%;top:56%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-shield"/></svg></span>
+                <span style="left:83%;top:63%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-clock"/></svg></span>
+                <span style="left:22%;top:79%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-id"/></svg></span>
+                <span style="left:50%;top:84%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-scan"/></svg></span>
+                <span style="left:75%;top:81%"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-edit"/></svg></span>
+              </div>
+
+              <div class="splash__logo">
+                <svg viewBox="0 0 24 24" class="splash__seal">
+                  <path d="M12 1.9 19.8 5v6.5c0 4.9-3.2 8.3-7.8 10.3-4.6-2-7.8-5.4-7.8-10.3V5z"
+                        fill="none" stroke="#2b7cff" stroke-width="1.25" stroke-linejoin="round"/>
+                  <text x="12" y="15.4" text-anchor="middle" font-size="8.6" font-weight="700" fill="#2b7cff">税</text>
+                </svg>
+              </div>
+              <h1 class="splash__title">个人所得税</h1>
+              <p class="splash__sub">Individual Income Tax</p>
+
+              <div class="splash__bottom">
+                <svg viewBox="0 0 20 20" class="splash__emblem" aria-hidden="true">
+                  <path d="M10 1.4 17.6 5v6.2c0 4-2.7 6.8-7.6 8.4-4.9-1.6-7.6-4.4-7.6-8.4V5z" fill="#d8342a"/>
+                  <path d="M10 3.4 15.8 5.8v5.2c0 3-2 5.1-5.8 6.4-3.8-1.3-5.8-3.4-5.8-6.4V5.8z" fill="none" stroke="#f6d68a" stroke-width="1"/>
+                  <text x="10" y="12.6" text-anchor="middle" font-size="6.4" font-weight="700" fill="#f6d68a">税</text>
+                </svg>
+                <span>国家税务总局主办</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ 2. 登录（对齐截图 03） ============ -->
+          <section class="page" data-page="login">
+            <div class="login">
+              <header class="navbar">
+                <button class="navlink" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg>返回</button>
+                <h1>个人所得税</h1>
+                <span class="navbar__pad"></span>
+              </header>
+
+              <div class="login-body">
+                <div class="login-avatar">
+                  <svg class="ic" viewBox="0 0 24 24"><use href="#ic-user"/></svg>
+                </div>
+
+                <div class="lfield">
+                  <label>账号</label>
+                  <input type="text" id="loginUser" placeholder="手机号码/证件号码" autocomplete="off">
+                  <svg class="ic lfield__q" viewBox="0 0 24 24"><use href="#ic-help"/></svg>
+                </div>
+                <div class="lfield">
+                  <label>密码</label>
+                  <input type="password" id="loginPwd" placeholder="请输入密码" autocomplete="off">
+                </div>
+
+                <div class="slider" id="slider">
+                  <span class="slider__track"></span>
+                  <span class="slider__knob" id="sliderKnob">
+                    <svg class="ic" viewBox="0 0 24 24"><use href="#ic-arrow"/></svg>
+                    <svg class="ic" viewBox="0 0 24 24"><use href="#ic-arrow"/></svg>
+                  </span>
+                  <span class="slider__text" id="sliderText">请按住滑块，拖动到最右边</span>
+                </div>
+
+                <div class="login-links">
+                  <button data-toast="指纹登录（演示）">指纹登录</button><i></i><button data-toast="找回密码（演示）">找回密码</button>
+                </div>
+
+                <button class="login-btn" id="btnLogin" disabled>登 录</button>
+                <button class="reg-btn" data-toast="注册功能在演示环境未开放">注 册</button>
+
+                <div class="login-other"><i></i><span>其他登录方式</span><i></i></div>
+                <button class="digit-id" data-toast="数字身份登录（演示）">
+                  <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <circle cx="24" cy="24" r="22" fill="#d8342a"/>
+                    <circle cx="24" cy="24" r="18" fill="none" stroke="#f6d68a" stroke-width="1.6"/>
+                    <text x="24" y="21.5" text-anchor="middle" font-size="9.5" font-weight="700" fill="#f6d68a">数字</text>
+                    <text x="24" y="33" text-anchor="middle" font-size="9.5" font-weight="700" fill="#f6d68a">身份</text>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ 3. 首页（对齐截图 02 未登录 / 04 已登录） ============ -->
+          <section class="page" data-page="home" data-tab="home">
+            <header class="home-top">
+              <div class="hsearch" data-toast="搜索：请输入功能或服务名称">
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-search"/></svg>
+                <span>请输入您想找的功能/服务</span>
+                <svg class="ic hsearch__scan" viewBox="0 0 24 24"><use href="#ic-scan"/></svg>
+              </div>
+              <div class="hnotice" data-toast="公告详情（演示）">
+                <svg class="ic hnotice__horn" viewBox="0 0 24 24"><use href="#ic-horn"/></svg>
+                <b class="hnotice__num" id="hnoticeNum">3</b>
+                <div class="hnotice__track"><span id="hnoticeText"></span></div>
+              </div>
+            </header>
+
+            <div class="home-body2">
+              <div id="homeTopic"></div>
+
+              <div class="hsection"><i></i>重点服务推荐</div>
+              <div id="homeFocus"></div>
+
+              <div class="hgrid" id="hgrid"></div>
+
+              <div id="homeBanner"></div>
+
+              <div class="newstabs" id="newsTabs"></div>
+              <div class="newslist" id="newsList"></div>
+              <button class="news-more" data-toast="更多资讯（演示）">查看更多 <svg class="ic" viewBox="0 0 24 24"><use href="#ic-arrow"/></svg></button>
+            </div>
+          </section>
+
+          <!-- ============ 3.5 待办 ============ -->
+          <section class="page" data-page="todo" data-tab="todo">
+            <header class="navbar">
+              <h1>待办</h1>
+              <button class="iconbtn" data-toast="全部标记已读（演示）">
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-check"/></svg>
+              </button>
+            </header>
+            <div class="page-body" id="todoList"></div>
+          </section>
+
+          <!-- ============ 4. 办税 ============ -->
+          <section class="page" data-page="tax" data-tab="tax">
+            <header class="navbar">
+              <h1>办税</h1>
+              <button class="iconbtn" data-toast="历史办税记录（演示）">
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-clock"/></svg>
+              </button>
+            </header>
+            <div class="page-body" id="taxGroups"></div>
+          </section>
+
+          <!-- ============ 4.5 消息 ============ -->
+          <section class="page" data-page="msg" data-tab="msg">
+            <header class="navbar">
+              <h1>消息</h1>
+              <button class="iconbtn" data-toast="全部已读（演示）">
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-check"/></svg>
+              </button>
+            </header>
+            <div class="page-body" id="msgList"></div>
+          </section>
+
+          <!-- ============ 5. 我的（未登录 01 / 已登录，由 JS 渲染） ============ -->
+          <section class="page" data-page="mine" data-tab="mine">
+            <div id="mineBody"></div>
+          </section>
+
+          <!-- ============ 6. 年度汇算 · 步骤1 选择年度与方式 ============ -->
+          <section class="page" data-page="annual-1">
+            <header class="navbar">
+              <button class="iconbtn" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg></button>
+              <h1>综合所得年度汇算</h1>
+              <span class="navbar__pad"></span>
+            </header>
+            <div class="flowbar"><i style="width:15%"></i></div>
+            <div class="page-body">
+              <div class="sec-title">申报年度</div>
+              <div class="pick-card is-active" data-year="2025">
+                <div>
+                  <strong>2025 年度</strong>
+                  <span>汇算办理期：2026年3月1日 — 6月30日</span>
+                </div>
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-check"/></svg>
+              </div>
+
+              <div class="sec-title">填报方式</div>
+              <div class="radio-card is-active" data-method="declared">
+                <div class="radio-card__body">
+                  <strong>使用已申报数据填报 <em>推荐</em></strong>
+                  <span>税务机关已预填部分申报数据，确认即可，无需手工填写</span>
+                </div>
+                <span class="radio-dot"></span>
+              </div>
+              <div class="radio-card" data-method="manual">
+                <div class="radio-card__body">
+                  <strong>自行填写</strong>
+                  <span>自行录入收入、扣除等全部数据</span>
+                </div>
+                <span class="radio-dot"></span>
+              </div>
+
+              <div class="tip-card">
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-info"/></svg>
+                <p>纳税人在纳税年度内已依法预缴个人所得税，且年度汇算需补税金额不超过 400 元，或年度汇算需补税但综合所得收入不超过 12 万元的，可免于办理年度汇算。</p>
+              </div>
+            </div>
+            <div class="page-footer">
+              <button class="btn btn--primary btn--block" data-go="annual-2">开始申报</button>
+            </div>
+          </section>
+
+          <!-- ============ 7. 步骤2 确认基本信息 ============ -->
+          <section class="page" data-page="annual-2">
+            <header class="navbar">
+              <button class="iconbtn" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg></button>
+              <h1>确认基本信息</h1>
+              <span class="navbar__pad"></span>
+            </header>
+            <div class="flowbar"><i style="width:32%"></i></div>
+            <div class="page-body">
+              <div class="sec-title">个人基础信息</div>
+              <div class="kv-card">
+                <div class="kv"><span>姓名</span><b>张*明</b></div>
+                <div class="kv"><span>纳税人识别号</span><b>3****************7</b></div>
+                <div class="kv"><span>汇缴地</span><b>广东省 深圳市 南山区</b></div>
+                <div class="kv"><span>任职受雇单位</span><b>深圳市某某科技有限公司</b></div>
+              </div>
+
+              <div class="sec-title">汇算地确认</div>
+              <div class="cell" data-toast="选择汇缴地（演示）">
+                <span>汇缴地税务机关</span>
+                <span class="cell__right">国家税务总局深圳市南山区税务局 <svg class="ic" viewBox="0 0 24 24"><use href="#ic-arrow"/></svg></span>
+              </div>
+
+              <div class="sec-title">其他</div>
+              <div class="cell" data-toast="是否可享受免申报（演示）">
+                <span>可享受免申报</span>
+                <span class="cell__right">否 <svg class="ic" viewBox="0 0 24 24"><use href="#ic-arrow"/></svg></span>
+              </div>
+
+              <label class="agree" id="agreeBox">
+                <span class="checkbox" id="agreeChk"></span>
+                <span>我已阅读并同意《个人所得税年度自行申报表》及《申报数据真实性承诺书》，并承诺申报数据真实、准确、完整。</span>
+              </label>
+            </div>
+            <div class="page-footer">
+              <button class="btn btn--primary btn--block" id="btnAnnual2" data-go="annual-3" disabled>下一步</button>
+            </div>
+          </section>
+
+          <!-- ============ 8. 步骤3 收入与税前扣除 ============ -->
+          <section class="page" data-page="annual-3">
+            <header class="navbar">
+              <button class="iconbtn" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg></button>
+              <h1>收入和税前扣除</h1>
+              <span class="navbar__pad"></span>
+            </header>
+            <div class="flowbar"><i style="width:50%"></i></div>
+            <div class="page-body">
+              <div class="sec-title">收入</div>
+              <div class="kv-card" id="incomeSection"></div>
+              <div class="sec-title">费用、免税收入和税前扣除</div>
+              <div class="kv-card" id="deductSection"></div>
+              <div class="total-bar">
+                <span>应纳税所得额</span>
+                <b class="num-em" id="annualBase">0.00</b>
+              </div>
+            </div>
+            <div class="page-footer">
+              <button class="btn btn--primary btn--block" data-go="annual-4">下一步</button>
+            </div>
+          </section>
+
+          <!-- ============ 9. 步骤4 税款计算 ============ -->
+          <section class="page" data-page="annual-4">
+            <header class="navbar">
+              <button class="iconbtn" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg></button>
+              <h1>税款计算</h1>
+              <span class="navbar__pad"></span>
+            </header>
+            <div class="flowbar"><i style="width:68%"></i></div>
+            <div class="page-body">
+              <div class="result-hero">
+                <p>应退税额</p>
+                <div class="result-hero__num num-refund"><em id="refundBig">0.00</em><span>元</span></div>
+                <p class="result-hero__hint">您已预缴税额多于应纳税额，可申请退税</p>
+              </div>
+              <div class="kv-card" id="taxDetail"></div>
+              <div class="tip-card tip-card--warn">
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-info"/></svg>
+                <p>提交申报后，税务机关将按规定为您办理退税。请确保已绑定本人名下的银行卡。</p>
+              </div>
+            </div>
+            <div class="page-footer">
+              <button class="btn btn--primary btn--block" data-go="annual-5">提交申报</button>
+              <button class="btn btn--plain btn--block" data-toast="申报明细已展开（演示）">查看申报明细</button>
+            </div>
+          </section>
+
+          <!-- ============ 10. 步骤5 提交成功 ============ -->
+          <section class="page" data-page="annual-5" data-chrome="none">
+            <div class="done-wrap">
+              <div class="done-icon">
+                <svg viewBox="0 0 24 24"><path d="m5 12.6 4.6 4.6L19 7.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <h2>申报提交成功</h2>
+              <p>申报编号：20260518<strong>0086214735</strong></p>
+              <div class="done-card">
+                <div class="kv"><span>申报年度</span><b>2025 年度</b></div>
+                <div class="kv"><span>申报类型</span><b>综合所得年度汇算</b></div>
+                <div class="kv"><span>应退税额</span><b class="num-refund" id="doneRefund">0.00 元</b></div>
+                <div class="kv"><span>提交时间</span><b>2026-05-18 14:32</b></div>
+              </div>
+              <div class="done-actions">
+                <button class="btn btn--primary btn--block" data-go="annual-6">申请退税</button>
+                <button class="btn btn--plain btn--block" data-toast="已跳转申报记录（演示）">查看申报记录</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ 11. 步骤6 退税申请 / 进度 ============ -->
+          <section class="page" data-page="annual-6">
+            <header class="navbar">
+              <button class="iconbtn" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg></button>
+              <h1>申请退税</h1>
+              <span class="navbar__pad"></span>
+            </header>
+            <div class="flowbar"><i style="width:100%"></i></div>
+
+            <div class="page-body" id="refundForm">
+              <div class="refund-amount">
+                <span>退税金额</span>
+                <b class="num-refund" id="refundAmount">0.00 元</b>
+              </div>
+              <div class="sec-title">选择收款银行卡</div>
+              <div class="bankcard is-active" id="bankCard">
+                <div class="bankcard__logo">工</div>
+                <div class="bankcard__info">
+                  <strong>中国工商银行 · 储蓄卡</strong>
+                  <span>**** **** **** 6688</span>
+                </div>
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-check"/></svg>
+              </div>
+              <div class="cell" data-toast="添加银行卡（演示）">
+                <span>添加新的银行卡</span>
+                <span class="cell__right"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-arrow"/></svg></span>
+              </div>
+              <div class="tip-card">
+                <svg class="ic" viewBox="0 0 24 24"><use href="#ic-info"/></svg>
+                <p>为确保退税款项安全，银行卡必须为纳税人本人名下、且状态正常的 I 类账户。</p>
+              </div>
+            </div>
+
+            <div class="page-body is-hidden" id="refundResult">
+              <div class="status-head">
+                <div class="status-head__icon"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-check"/></svg></div>
+                <h2>退税申请已受理</h2>
+                <p>预计 10 个工作日内到账，请留意银行入账信息</p>
+              </div>
+              <div class="timeline">
+                <div class="timeline__item is-done">
+                  <i></i>
+                  <div><strong>提交退税申请</strong><span>2026-05-18 14:35</span></div>
+                </div>
+                <div class="timeline__item is-done">
+                  <i></i>
+                  <div><strong>税务机关审核通过</strong><span>2026-05-19 09:12</span></div>
+                </div>
+                <div class="timeline__item is-doing">
+                  <i></i>
+                  <div><strong>国库处理中</strong><span>处理中…</span></div>
+                </div>
+                <div class="timeline__item">
+                  <i></i>
+                  <div><strong>退税到账</strong><span>待完成</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="page-footer" id="refundFooter">
+              <button class="btn btn--primary btn--block" id="btnRefund">提交退税申请</button>
+            </div>
+            <div class="page-footer is-hidden" id="refundFooter2">
+              <button class="btn btn--plain btn--block" data-go="home">返回首页</button>
+            </div>
+          </section>
+
+          <!-- ============ 12. 收入纳税明细 · 查询条件（官方截图 02） ============ -->
+          <section class="page page--flat" data-page="income-query">
+            <header class="navbar">
+              <button class="navlink" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg>返回</button>
+              <h1>收入纳税明细</h1>
+              <span class="navbar__pad"></span>
+            </header>
+
+            <div class="qsec">请选择纳税年度</div>
+            <div class="qcard">
+              <button class="qrow" id="yearPick">
+                <span>年度</span>
+                <b id="qYear">2026</b>
+                <svg class="ic qrow__chev" viewBox="0 0 24 24"><use href="#ic-arrow"/></svg>
+              </button>
+            </div>
+
+            <div class="qsec">请选择所得类型</div>
+            <div class="qcard" id="typeList"></div>
+            <button class="qmore" id="moreTypes">其他类型 <svg class="ic" viewBox="0 0 24 24"><use href="#ic-down"/></svg></button>
+
+            <div class="qbtn-wrap">
+              <button class="btn-query" id="btnQuery">查 询</button>
+            </div>
+          </section>
+
+          <!-- ============ 13. 收入纳税明细 · 列表（官方截图 03~07） ============ -->
+          <section class="page page--flat" data-page="income">
+            <header class="navbar">
+              <button class="navlink" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg>返回</button>
+              <h1>收入纳税明细</h1>
+              <button class="navlink navlink--r" data-toast="批量申诉：请先勾选需申诉的记录（演示）">批量申诉</button>
+            </header>
+
+            <div class="sumlist">
+              <div class="sumlist__row">
+                <span class="sumlist__label">收入合计<svg class="ic sumlist__q" viewBox="0 0 24 24"><use href="#ic-help"/></svg>：</span>
+                <b class="sumlist__val" id="sumIncome">0.00元</b>
+              </div>
+              <div class="sumlist__row">
+                <span class="sumlist__label">已申报税额合计：</span>
+                <b class="sumlist__val" id="sumTax">0.00元</b>
+              </div>
+            </div>
+
+            <div class="reclist" id="incomeList"></div>
+          </section>
+
+          <!-- ============ 13. 收入明细详情 ============ -->
+          <section class="page page--flat" data-page="income-detail">
+            <header class="navbar">
+              <button class="navlink" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg>返回</button>
+              <h1>收入纳税明细详情</h1>
+              <span class="navbar__pad"></span>
+            </header>
+
+            <div class="sumlist">
+              <div class="sumlist__row">
+                <span class="sumlist__label">收入：</span>
+                <b class="sumlist__val" id="dIncome">0.00元</b>
+              </div>
+              <div class="sumlist__row">
+                <span class="sumlist__label">已申报税额：</span>
+                <b class="sumlist__val" id="dTax">0.00元</b>
+              </div>
+            </div>
+
+            <div class="sec2">基本信息</div>
+            <div class="kvlist" id="detailKv"></div>
+
+            <div class="sec2">扣缴义务人信息</div>
+            <div class="kvlist" id="detailOrg"></div>
+
+            <p class="page-foot-note">如对这笔记录有异议，可在列表页右上角发起「批量申诉」</p>
+          </section>
+
+          <!-- ============ 14. 专项附加扣除 ============ -->
+          <section class="page" data-page="deduct">
+            <header class="navbar">
+              <button class="iconbtn" data-back><svg class="ic" viewBox="0 0 24 24"><use href="#ic-back"/></svg></button>
+              <h1>专项附加扣除</h1>
+              <span class="navbar__pad"></span>
+            </header>
+            <div class="page-body">
+              <div class="deduct-sum">
+                <span>2025 年度专项附加扣除合计</span>
+                <b><span id="deductTotal">0.00</span><em>元</em></b>
+                <p class="deduct-sum__note" id="deductNote"></p>
+              </div>
+              <div id="deductList"></div>
+            </div>
+            <div class="page-footer">
+              <button class="btn btn--primary btn--block" data-toast="填报向导（演示）">填报专项附加扣除</button>
+            </div>
+          </section>
+
+          <!-- ============ 15. 通用占位页 ============ -->
+          <section class="page page--center" data-page="placeholder">
+            <div class="ph">
+              <div class="ph__icon"><svg class="ic" viewBox="0 0 24 24"><use href="#ic-doc"/></svg></div>
+              <h2 id="phTitle">功能建设中</h2>
+              <p id="phDesc">该页面为演示版占位，可在此扩展真实业务界面</p>
+              <button class="btn btn--plain" data-back>返 回</button>
+            </div>
+          </section>
+
+        </div><!-- /viewport -->
+
+        <!-- 底部导航（对齐截图 01/02：五项悬浮胶囊） -->
+        <nav class="tabbar" id="tabbar">
+          <button class="tabbar__item" data-tabgo="home">
+            <svg class="ic" viewBox="0 0 24 24"><use href="#ic-home"/></svg><span>首页</span>
+          </button>
+          <button class="tabbar__item" data-tabgo="todo">
+            <svg class="ic" viewBox="0 0 24 24"><use href="#ic-todo"/></svg><span>待办</span>
+          </button>
+          <button class="tabbar__item" data-tabgo="tax">
+            <svg class="ic" viewBox="0 0 24 24"><use href="#ic-searchdoc"/></svg><span>办&amp;查</span>
+          </button>
+          <button class="tabbar__item" data-tabgo="msg">
+            <svg class="ic" viewBox="0 0 24 24"><use href="#ic-chat"/></svg><span>消息</span>
+          </button>
+          <button class="tabbar__item" data-tabgo="mine">
+            <svg class="ic" viewBox="0 0 24 24"><use href="#ic-user"/></svg><span>我的</span>
+          </button>
+        </nav>
+
+        <!-- 人脸识别扫描遮罩（覆盖整个屏幕） -->
+        <div class="face-scan" id="faceScan">
+          <div class="face-scan__ring"></div>
+          <svg class="ic face-scan__icon" viewBox="0 0 24 24"><use href="#ic-face"/></svg>
+          <p>正在识别，请正视屏幕…</p>
+        </div>
+
+        <!-- 年度选择 · 滚轮弹层（对齐截图 09） -->
+        <div class="sheet" id="yearSheet">
+          <div class="sheet__mask" id="yearSheetMask"></div>
+          <div class="sheet__panel sheet__panel--wheel">
+            <div class="wheel__bar">
+              <button class="wheel__cancel" id="yearCancel">取消</button>
+              <button class="wheel__ok" id="yearOk">确定</button>
+            </div>
+            <div class="wheel" id="yearWheel">
+              <div class="wheel__mask wheel__mask--top"></div>
+              <div class="wheel__mask wheel__mask--btm"></div>
+              <ul class="wheel__list" id="yearOptions"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 提示条 -->
+        <div class="toast" id="toast"></div>
+
+      </div><!-- /phone__screen -->
+    </div><!-- /phone -->
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
