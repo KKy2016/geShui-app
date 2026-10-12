@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!--
+    Android 自适应图标（maskable）专用：
+    1) 背景铺满整块画布（无圆角），交给系统按 圆/方/水滴 等形状裁切；
+    2) 所有内容收缩到中心直径 410px 的安全圆内（内接正方形 290×290），
+       无论系统用哪种遮罩都不会被切掉。
+  -->
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2=".85" y2="1">
+      <stop offset="0" stop-color="#65b6fb"/>
+      <stop offset=".5" stop-color="#2b7fe8"/>
+      <stop offset="1" stop-color="#0e5bc0"/>
+    </linearGradient>
+    <radialGradient id="gloss2" cx=".26" cy=".14" r=".9">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 满幅背景（务必铺满，不能有圆角） -->
+  <rect width="512" height="512" fill="url(#bg2)"/>
+  <rect width="512" height="512" fill="url(#gloss2)"/>
+
+  <!-- 安全区内容：整体以中心为基准等比缩放到 78% -->
+  <g transform="translate(256,256) scale(.78) translate(-256,-256)">
+    <path d="M256 74l118 40v122c0 86-53 141-118 167-65-26-118-81-118-167V114z"
+          fill="#ffffff" fill-opacity=".07"
+          stroke="#ffffff" stroke-width="18" stroke-linejoin="round"/>
+    <text x="256" y="274" text-anchor="middle"
+          font-family="'Microsoft YaHei','PingFang SC',sans-serif"
+          font-size="132" font-weight="700" fill="#ffffff">税</text>
+  </g>
+
+  <!-- 兜底文字同样落在安全圆内 -->
+  <text x="256" y="424" text-anchor="middle"
+        font-family="'Microsoft YaHei','PingFang SC',sans-serif"
+        font-size="34" font-weight="700" fill="#ffffff" fill-opacity=".95"
+        letter-spacing="4">国家税务总局</text>
+</svg>

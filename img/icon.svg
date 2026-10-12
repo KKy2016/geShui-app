@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2=".85" y2="1">
+      <stop offset="0" stop-color="#65b6fb"/>
+      <stop offset=".5" stop-color="#2b7fe8"/>
+      <stop offset="1" stop-color="#0e5bc0"/>
+    </linearGradient>
+    <linearGradient id="rib" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8ac4fc"/>
+      <stop offset="1" stop-color="#3d8de8"/>
+    </linearGradient>
+    <radialGradient id="gloss" cx=".26" cy=".14" r=".85">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".24"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="round"><rect width="512" height="512" rx="112"/></clipPath>
+  </defs>
+
+  <!-- 蓝色渐变圆角底 -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="112" fill="url(#gloss)"/>
+
+  <g clip-path="url(#round)">
+    <!-- 白描边盾牌 + 税 -->
+    <path d="M256 74l118 40v122c0 86-53 141-118 167-65-26-118-81-118-167V114z"
+          fill="#ffffff" fill-opacity=".07"
+          stroke="#ffffff" stroke-width="17" stroke-linejoin="round"/>
+    <text x="256" y="272" text-anchor="middle"
+          font-family="'Microsoft YaHei','PingFang SC',sans-serif"
+          font-size="130" font-weight="700" fill="#ffffff">税</text>
+
+    <!-- 底部绶带 -->
+    <path d="M0 512v-74c152-48 360-48 512 0v74z" fill="url(#rib)"/>
+    <text x="256" y="466" text-anchor="middle"
+          font-family="'Microsoft YaHei','PingFang SC',sans-serif"
+          font-size="45" font-weight="700" fill="#ffffff" letter-spacing="5">国家税务总局</text>
+    <text x="256" y="501" text-anchor="middle"
+          font-family="'Microsoft YaHei','PingFang SC',sans-serif"
+          font-size="26" fill="#ffffff" letter-spacing="10">发 布</text>
+  </g>
+</svg>
