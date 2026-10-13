@@ -17,16 +17,13 @@
     });
   }
 
-  /* ---------------------------------------------------------------
-     1. 收入纳税明细（与截图一致）
-     --------------------------------------------------------------- */
-  var ORG_A = '北京软通动力数字科技有限公司';
-  var ORG_B = '软通动力技术服务有限公司';
+  /* 扣缴义务人（任职受雇单位） */
+  var ORG_A = '北京金积云信息咨询合伙企业';
+  var ORG_B = ORG_A;   /* 历史年度主体：与现主体同属一家公司 */
   var ORG_C = '云账户（天津）共享经济服务有限公司';
 
   var ORG_CODES = {};
   ORG_CODES[ORG_A] = '91110108MA01****X8';
-  ORG_CODES[ORG_B] = '91110105MA00****Y2';
   ORG_CODES[ORG_C] = '91120116MA06****9K';
 
   function salary(period, income, tax, org) {
@@ -36,33 +33,49 @@
     return { period: period, type: '劳务报酬', sub: '其他连续劳务报酬', org: org, income: income, tax: tax };
   }
 
+  /* ---------------------------------------------------------------
+     1. 收入纳税明细
+        数据口径：税前月薪 12,000.00 元，区间 2025-01 ~ 2026-09（共 21 个月）
+
+        每月可扣除项（用于算个税，不体现在「收入」栏 —— 与官方 App 一致）：
+          减除费用            5,000.00
+          专项扣除(三险一金)   1,860.00  = 12,000 ×(养老8% + 医疗2% + 失业0.5% + 公积金5%)
+          专项附加扣除         9,000.00  = 住房租金 1,500 + 赡养老人 1,500
+                                        + 子女教育 2,000×2(小学/幼儿园) + 婴幼儿照护 2,000
+          ------------------------------------------------
+          每月应纳税所得额 = 12,000 − 5,000 − 1,860 − 9,000 = −3,860.00（负数）
+
+        专项附加扣除已完全覆盖 12,000 月薪的应税部分，累计应纳税所得额始终为负，
+        故每月预扣个税均为 0.00 —— 明细页「已申报税额」全部为 0，年度汇算时亦无需补税。
+        工资条口径的到手金额 = 12,000 − 1,860 五险一金 = 10,140.00 元/月
+
+        年度合计：2025 收入 144,000.00 / 已申报税额 0.00 ；2026 收入 108,000.00 / 0.00
+     --------------------------------------------------------------- */
   var records = {
     2026: [
-      salary('2026-08', 16000.00,  988.68, ORG_A),
-      salary('2026-07', 13813.01,  771.70, ORG_A),
-      salary('2026-06', 15243.27,  914.72, ORG_A),
-      salary('2026-05', 22500.00, 1438.52, ORG_A),
-      salary('2026-04',  9500.00,  102.12, ORG_A),
-      salary('2026-03', 16000.00,  297.12, ORG_A),
-      salary('2026-02', 16703.43,  318.22, ORG_A),
-      salary('2026-01', 15296.57,  276.02, ORG_A)
+      salary('2026-09', 12000.00,   0.00, ORG_A),
+      salary('2026-08', 12000.00,   0.00, ORG_A),
+      salary('2026-07', 12000.00,   0.00, ORG_A),
+      salary('2026-06', 12000.00,   0.00, ORG_A),
+      salary('2026-05', 12000.00,   0.00, ORG_A),
+      salary('2026-04', 12000.00,   0.00, ORG_A),
+      salary('2026-03', 12000.00,   0.00, ORG_A),
+      salary('2026-02', 12000.00,   0.00, ORG_A),
+      salary('2026-01', 12000.00,   0.00, ORG_A)
     ],
     2025: [
-      salary('2025-12', 16000.00,  147.12, ORG_A),
-      salary('2025-11', 22217.25, 1557.16, ORG_B),
-      labor ('2025-11',   277.40,    0.00, ORG_C),
-      salary('2025-10', 15383.62,  955.97, ORG_B),
-      salary('2025-09', 16000.00,  946.18, ORG_B),
-      salary('2025-08', 21555.71, 1501.75, ORG_B),
-      salary('2025-07',  9037.07,  255.88, ORG_B),
-      /* 6~1 月截图未展示，参考 2026 年同月金额补全（5 月为凑齐截图合计的差额月），
-         加总 = 187257.41 / 7560.77，与截图 10 顶部合计完全一致 */
-      salary('2025-06', 15243.27,  914.72, ORG_B),
-      salary('2025-05', 14043.09,  288.51, ORG_B),
-      salary('2025-04',  9500.00,  102.12, ORG_B),
-      salary('2025-03', 16000.00,  297.12, ORG_B),
-      salary('2025-02', 16703.43,  318.22, ORG_B),
-      salary('2025-01', 15296.57,  276.02, ORG_B)
+      salary('2025-12', 12000.00,   0.00, ORG_A),
+      salary('2025-11', 12000.00,   0.00, ORG_A),
+      salary('2025-10', 12000.00,   0.00, ORG_A),
+      salary('2025-09', 12000.00,   0.00, ORG_A),
+      salary('2025-08', 12000.00,   0.00, ORG_A),
+      salary('2025-07', 12000.00,   0.00, ORG_A),
+      salary('2025-06', 12000.00,   0.00, ORG_A),
+      salary('2025-05', 12000.00,   0.00, ORG_A),
+      salary('2025-04', 12000.00,   0.00, ORG_A),
+      salary('2025-03', 12000.00,   0.00, ORG_A),
+      salary('2025-02', 12000.00,   0.00, ORG_A),
+      salary('2025-01', 12000.00,   0.00, ORG_A)
     ],
     2024: [
       salary('2024-12', 22217.25, 1557.16, ORG_B),
@@ -80,7 +93,7 @@
     ]
   };
 
-  /* 合计（收入 125056.28/5107.10、187257.41/7560.77，与截图一致） */
+  /* 合计：12,000 月薪 + 4 类专项附加扣除 → 2025 = 144000.00 / 0.00 ；2026 = 108000.00 / 0.00 */
   Object.keys(records).forEach(function (y) {
     var list = records[y];
     list.incomeTotal = round2(list.reduce(function (s, r) { return s + r.income; }, 0));
@@ -156,7 +169,7 @@
   var homeFocus = {
     guest: { desc: '若符合条件，您可点击下方填报', chip: '3位家人已参与',
              btns: [{ label: '我要填报', cls: 'fbtn--blue', route: 'deduct' }] },
-    user:  { desc: '您已填报<b>3</b>项专项附加扣除', chip: '',
+    user:  { desc: '您已填报<b>5</b>项专项附加扣除', chip: '',
              btns: [{ label: '填报', cls: 'fbtn--blue', route: 'deduct' },
                     { label: '按单查询', cls: 'fbtn--orange', route: '' }] }
   };
@@ -245,7 +258,7 @@
   var messages = [
     { type: 'ok',   title: '退税进度提醒', desc: '您申请的2025年度综合所得汇算退税 2000.00 元已通过税务机关审核，国库处理中。', time: '05-19' },
     { type: 'info', title: '申报成功提醒', desc: '您的2025年度综合所得年度汇算申报已提交成功。', time: '05-18' },
-    { type: 'info', title: '专项附加扣除提醒', desc: '您已填报3项专项附加扣除，请及时关注信息变化。', time: '05-12' }
+    { type: 'info', title: '专项附加扣除提醒', desc: '您已填报5项专项附加扣除（住房租金、赡养老人、子女教育2人、婴幼儿照护），请及时关注信息变化。', time: '05-12' }
   ];
 
   /* ---------------------------------------------------------------
@@ -277,7 +290,7 @@
   var taxGroups = [
     { title: '我要办税', items: [
       { label: '综合所得年度汇算', desc: '2025 年度 · 办理中', icon: 'ic-calc', tint: 't-orange', route: 'annual-1' },
-      { label: '专项附加扣除填报', desc: '7 项扣除 · 已填报 3 项', icon: 'ic-plusdoc', tint: 't-blue', route: 'deduct' },
+      { label: '专项附加扣除填报', desc: '已填报 5 项 · 年度 108,000 元', icon: 'ic-plusdoc', tint: 't-blue', route: 'deduct' },
       { label: '经营所得年度申报', icon: 'ic-wallet', tint: 't-purple' },
       { label: '申报更正与作废', icon: 'ic-edit', tint: 't-teal' }
     ]},
@@ -298,14 +311,14 @@
     ]}
   ];
 
+  /* 专项附加扣除：本人实际情况只有这 4 类 / 5 条（收入纳税明细的个税即按此计算）
+     月度合计 1,500 + 1,500 + 2,000×2 + 2,000 = 9,000 元 → 年度 108,000 元 */
   var deductions = [
-    { label: '子女教育',   sub: '张*涵 · 子女',              icon: 'ic-users',  tint: 't-blue',   unit: '1,000 元/月', amount: 12000, status: '已填报' },
-    { label: '赡养老人',   sub: '张*山 · 父亲（非独生分摊）', icon: 'ic-user',   tint: 't-teal',   unit: '1,000 元/月', amount: 12000, status: '已填报' },
-    { label: '大病医疗',   sub: '本人 · 仅年度汇算可扣除',    icon: 'ic-shield', tint: 't-green',  unit: '据实扣除',    amount: 20000, status: '汇算填报' },
-    { label: '住房租金',   sub: '深圳市南山区',              icon: 'ic-home',   tint: 't-amber',  unit: '1,500 元/月', amount: 0, status: '未填报' },
-    { label: '住房贷款利息', sub: '首套住房贷款',            icon: 'ic-card',   tint: 't-purple', unit: '1,000 元/月', amount: 0, status: '未填报' },
-    { label: '继续教育',   sub: '学历（学位）继续教育',       icon: 'ic-cert',   tint: 't-pink',   unit: '400 元/月',   amount: 0, status: '未填报' },
-    { label: '3岁以下婴幼儿照护', sub: '—',                  icon: 'ic-users',  tint: 't-red',    unit: '2,000 元/月', amount: 0, status: '未填报' }
+    { label: '住房租金',        sub: '深圳市南山区 · 本人承租',              icon: 'ic-home',   tint: 't-amber',  unit: '1,500 元/月', amount: 18000, status: '已填报' },
+    { label: '赡养老人',        sub: '张*山 · 父亲（年满60岁 · 非独生分摊）', icon: 'ic-user',   tint: 't-teal',   unit: '1,500 元/月', amount: 18000, status: '已填报' },
+    { label: '子女教育',        sub: '张*涵 · 老大 · 小学',                  icon: 'ic-users',  tint: 't-blue',   unit: '2,000 元/月', amount: 24000, status: '已填报' },
+    { label: '子女教育',        sub: '张*宇 · 老二 · 幼儿园',                icon: 'ic-users',  tint: 't-blue',   unit: '2,000 元/月', amount: 24000, status: '已填报' },
+    { label: '3岁以下婴幼儿照护', sub: '张*安 · 老三 · 1岁',                  icon: 'ic-heart',  tint: 't-red',    unit: '2,000 元/月', amount: 24000, status: '已填报' }
   ];
 
   var bank = { name: '中国工商银行 · 储蓄卡', no: '**** **** **** 6688', short: '工' };
@@ -340,7 +353,7 @@
     taxGroups: taxGroups,
     deductions: deductions,
     bank: bank,
-    extraDeduct: 20000
+    extraDeduct: 0
   };
 
   global.TaxUtil = { fmt: fmt, fmtMoney: fmtMoney, round2: round2 };

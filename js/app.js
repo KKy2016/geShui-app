@@ -472,6 +472,7 @@
     $('#sumTax').textContent = fmt(Math.round(tax * 100) / 100) + '元';
 
     var wrap = $('#incomeList');
+    wrap.scrollTop = 0;  /* 重新查询时列表回到顶部 */
     if (!list.length) {
       wrap.innerHTML = '<div class="empty">' + ic('ic-doc') + '<p>该年度暂无申报记录</p></div>';
       return;
@@ -544,13 +545,15 @@
   /* ======================= 9. 渲染：专项附加扣除 ======================= */
   function renderDeduct() {
     var total = M.deductions.reduce(function (s, d) { return s + d.amount; }, 0);
-    var paidHad = 24000;                     // 预扣环节已享受
-    var extra = M.extraDeduct;               // 汇算补充扣除
+    var monthly = M.deductions.reduce(function (s, d) {
+      var n = parseFloat(String(d.unit).replace(/[^\d.]/g, ''));
+      return s + (isNaN(n) ? 0 : n);
+    }, 0);
 
     $('#deductTotal').textContent = fmt(total);
     $('#deductNote').textContent =
-      '其中预扣环节已享受扣除 ' + fmt(paidHad) + ' 元，年度汇算可补充扣除 ' +
-      fmt(extra) + ' 元（大病医疗）。';
+      '共 ' + M.deductions.length + ' 项，月度合计 ' + monthly.toLocaleString('en-US') +
+      ' 元，均已在每月预扣环节享受，本年度无汇算补充扣除项。';
 
     $('#deductList').innerHTML = M.deductions.map(function (d) {
       var has = d.amount > 0;

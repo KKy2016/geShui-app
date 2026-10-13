@@ -815,6 +815,15 @@
    ========================================================================== */
 .page--flat{background:#f2f2f4;}
 
+/* 列表页整页固定：导航栏 + 合计区钉住，仅月份明细内部滚动 */
+.page[data-page="income"].is-active{
+  height:100%;          /* 占满视口高度，不再随 viewport 滚动 */
+  overflow:hidden;
+}
+.page[data-page="income"] .sumlist{
+  border-bottom:1px solid #ececee;  /* 合计区与列表的分隔 */
+}
+
 /* 导航栏文字链接（返回 / 批量申诉） */
 .navlink{
   display:flex;align-items:center;gap:1px;
@@ -861,8 +870,15 @@
   white-space:nowrap;
 }
 
-/* 明细记录卡片 */
-.reclist{flex:1 1 auto;padding:10px 0 0;}
+/* 明细记录卡片（该区域为唯一滚动区） */
+.reclist{
+  flex:1 1 auto;min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding:10px 0 10px;
+}
+.reclist::-webkit-scrollbar{display:none;}
 .rec{
   background:#fff;
   padding:12px 16px 8px;
